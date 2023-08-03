@@ -28,10 +28,34 @@ main {
   padding: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.5);
   overflow-y: auto;
+  background-color: #f4f1eb;
 }
 
 #show_messages p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0.5rem;
   font-size: 12px;
+}
+
+.left,
+.right {
+  clear: both;
+  color: #111b21;
+  border-radius: 7.5px;
+  box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+}
+
+.left {
+  float: left;
+  background-color: #fff;
+  border-top-left-radius: 0;
+}
+
+.right {
+  float: right;
+  background-color: #d9fdd3;
+  border-top-right-radius: 0;
 }
 
 #form {
@@ -72,7 +96,7 @@ main {
   color: green;
 }
 
-#inputArea{
+#inputArea {
   width: calc(100% / 1.42 - 40px);
   display: flex;
   flex-direction: column;

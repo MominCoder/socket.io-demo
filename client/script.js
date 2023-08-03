@@ -1,17 +1,29 @@
 import { io } from "socket.io-client";
 
+const name = prompt("Enter your name to join");
+
 var show_messages = document.getElementById("show_messages");
 var form = document.getElementById("form");
 var joinRoomBtn = document.getElementById("joinRoomBtn");
 
 const socket = io("http://localhost:5000");
 
+if(name) socket.emit("new-user-join", name);
+
+socket.on("user-joined", name => {
+  displayMessage(`${name} joined the chat`, "right");
+});
+
 socket.on("connect", () => {
   displayMessage(`You connected with id : ${socket.id}`);
 });
 
-socket.on("broadcast", (msg) => {
-  displayMessage(msg);
+socket.on("broadcast-receive", (data) => {
+  displayMessage(`${data.name}: ${data.message}`, "left");
+});
+
+socket.on("left-chat", (name) => {
+  displayMessage(`${name} left the chat`, "left");
 });
 
 form.addEventListener("submit", (e) => {
@@ -33,7 +45,7 @@ form.addEventListener("submit", (e) => {
     socket.emit("send-message", message);
   }
 
-  displayMessage(message);
+  displayMessage(message, "right");
 
   messageInput.value = "";
 });
@@ -46,10 +58,13 @@ joinRoomBtn.addEventListener("click", () => {
   });
 });
 
-function displayMessage(message) {
+function displayMessage(message, position) {
   const pTag = document.createElement("p");
   pTag.textContent = message;
+  pTag.classList.add("message");
+  pTag.classList.add(position);
   show_messages.append(pTag);
+  show_messages.scrollTo(0, document.body.scrollHeight);
 };
 
 document.addEventListener("keydown", e => {
