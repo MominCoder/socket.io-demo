@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Socket.io Basics</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <main>
+        <div id="show_messages"></div>
+
+        <form id="form">
+          <div>
+            <label for="inpMessage">Message</label>
+            <div id="inputArea">
+              <input type="text" placeholder="Type your message here" id"
+              id="inpMessage" autocomplete="off" />
+              <input
+                type="text"
+                placeholder="Enter private room id"
+                id="privateRoomInput"
+                autocomplete="off"
+              />
+            </div>
+            <button type="submit" id="sendMessageBtn">Send</button>
+          </div>
+
+          <div>
+            <label for="room">Room</label>
+            <input
+              type="text"
+              placeholder="Enter common room name"
+              id="commonRoomName"
+              autocomplete="off"
+            />
+            <button type="button" id="joinRoomBtn">Join Room</button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
