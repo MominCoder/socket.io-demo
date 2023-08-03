@@ -1,6 +1,16 @@
 import { io } from "socket.io-client";
 
-const name = prompt("Enter your name to join");
+var name;
+
+function valueIsSet(value) {
+  return value && value !== "";
+}
+
+// running while loop, so that prompt will keep showing until we cannot pass the name and click ok!
+// if I dont use this approach, in case move ahead without entering name on prompt, next user will see null as username
+while (!valueIsSet(name)) {
+  name = prompt("Please enter your name");
+}
 
 var show_messages = document.getElementById("show_messages");
 var form = document.getElementById("form");
@@ -8,18 +18,22 @@ var joinRoomBtn = document.getElementById("joinRoomBtn");
 
 const socket = io("http://localhost:5000");
 
-if(name) socket.emit("new-user-join", name);
+// connect is an event from socket.io
+socket.on("connect", () => {
+  displayMessage(`You connected with id : ${socket.id}`, "right");
+});
 
-socket.on("user-joined", name => {
+if (name) socket.emit("new-user-join", name);
+
+socket.on("user-joined", (name) => {
   displayMessage(`${name} joined the chat`, "right");
 });
 
-socket.on("connect", () => {
-  displayMessage(`You connected with id : ${socket.id}`);
-});
-
 socket.on("broadcast-receive", (data) => {
-  displayMessage(`${data.name}: ${data.message}`, "left");
+  // passing id whenever private chat happening, so that next person can copy that socket id, paste in private room id and reply/talk to that person
+
+  const id = data.id ? `(${data.id})` : "";
+  displayMessage(`${data.name} ${id} : ${data.message}`, "left");
 });
 
 socket.on("left-chat", (name) => {
@@ -40,8 +54,8 @@ form.addEventListener("submit", (e) => {
   if (message === "") return;
 
   if (privateRoomId || roomName) {
-    socket.emit("send-message", message, privateRoomId || roomName);
-  }else{
+    socket.emit("send-message", message, socket.id, privateRoomId || roomName);
+  } else {
     socket.emit("send-message", message);
   }
 
@@ -54,7 +68,7 @@ joinRoomBtn.addEventListener("click", () => {
   var roomName = document.getElementById("commonRoomName").value;
 
   socket.emit("join-room", roomName, (message) => {
-    displayMessage(message);
+    displayMessage(message, "right");
   });
 });
 
@@ -65,9 +79,9 @@ function displayMessage(message, position) {
   pTag.classList.add(position);
   show_messages.append(pTag);
   show_messages.scrollTo(0, document.body.scrollHeight);
-};
+}
 
-document.addEventListener("keydown", e => {
+document.addEventListener("keydown", (e) => {
   if (e.target.matches("input")) return;
 
   if (e.key === "c") socket.connect();

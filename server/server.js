@@ -16,7 +16,7 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("user-joined", name);
   });
 
-  socket.on("send-message", (data, room) => {
+  socket.on("send-message", (data, id, room) => {
     // io.emit("broadcast-receive" , data);             // this will broadcast message to all users incluidng sender
 
     if (!room) {
@@ -27,13 +27,13 @@ io.on("connection", (socket) => {
     } else {
       socket
         .to(room)
-        .emit("broadcast-receive", { message: data, name: users[socket.id] });
+        .emit("broadcast-receive", { message: data, name: users[socket.id], id });
     }
   });
 
   socket.on("join-room", (room, cb) => {
     socket.join(room);
-    cb(`Joined ${room} room ----------------`);
+    cb(`You joined ${room} room ----------------`);
   });
 
   socket.on("disconnect", (message) => {

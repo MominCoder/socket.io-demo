@@ -9,14 +9,14 @@
   </head>
 
   <body>
-    <div class="container">
-      <main>
+    <div class="container flex">
+      <main class="flex column gap">
         <div id="show_messages"></div>
 
-        <form id="form">
-          <div>
+        <form id="form" class="flex column gap">
+          <div class="flex">
             <label for="inpMessage">Message</label>
-            <div id="inputArea">
+            <div class="flex column" id="inputArea">
               <input type="text" placeholder="Type your message here" id"
               id="inpMessage" autocomplete="off" />
               <input
@@ -29,7 +29,7 @@
             <button type="submit" id="sendMessageBtn">Send</button>
           </div>
 
-          <div>
+          <div class="flex">
             <label for="room">Room</label>
             <input
               type="text"
